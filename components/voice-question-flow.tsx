@@ -200,7 +200,6 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
               </Button>
             </div>
           </div>
-
           <div
             className={`min-h-[100px] p-4 rounded-lg border ${
               isListening ? "border-purple-500 bg-purple-500/10 animate-pulse" : "border-slate-700 bg-slate-900"
