@@ -44,7 +44,7 @@ export default function AnswerPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+    <main className="min-h-screen bg-amber-50 text-white">
       <div className="container mx-auto px-4 py-16">
         <VoiceQuestionFlow questions={questions} />
       </div>
