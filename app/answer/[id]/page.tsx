@@ -34,7 +34,7 @@ export default function AnswerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex items-center justify-center">
+      <div className="bg-gradient-to-b from-slate-900 to-slate-800 text-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-purple-500" />
           <p className="text-xl">Loading questions...</p>
@@ -44,7 +44,7 @@ export default function AnswerPage() {
   }
 
   return (
-    <main className="min-h-screen bg-amber-50 text-white">
+    <main className="bg-gradient-to-br from-sky-50 text-white">
       <div className="container mx-auto px-4 py-16">
         <VoiceQuestionFlow questions={questions} />
       </div>

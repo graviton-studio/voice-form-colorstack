@@ -140,30 +140,30 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
 
   if (completed) {
     return (
-      <div className="flex items-center justify-center p-6">
+      <div className="flex items-center justify-center p-6 bg-gradient-to-br from-sky-50 to-white min-h-screen">
         <div className="max-w-2xl mx-auto text-center space-y-8">
-          <div className="bg-rose-500/20 p-6 rounded-full inline-block mx-auto">
-            <CheckCircle2 className="h-16 w-16 text-rose-500" />
+          <div className="bg-sky-500/20 p-6 rounded-full inline-block mx-auto">
+            <CheckCircle2 className="h-16 w-16 text-sky-600" />
           </div>
-          <h1 className="text-4xl font-bold font-display tracking-tight">All Done!</h1>
-          <p className="text-xl text-orange-400">Thank you for completing the form using your voice.</p>
-          <div className="bg-white rounded-xl shadow-lg p-6 text-left border border-gray-100">
-            <h2 className="text-xl font-semibold mb-4 text-pink-900">Your Responses:</h2>
+          <h1 className="text-4xl font-bold font-display tracking-tight text-slate-900">All Done!</h1>
+          <p className="text-xl text-slate-600">Thank you for completing the form using your voice.</p>
+          <div className="bg-white rounded-xl shadow-sm p-6 text-left border border-slate-200">
+            <h2 className="text-xl font-semibold mb-4 text-slate-900">Your Responses:</h2>
             <div className="space-y-4">
               {answers.map((answer, index) => {
                 const question = questions.find((q) => q.id === answer.questionId)
                 return (
-                  <div key={answer.questionId} className="border-b border-pink-100 pb-3">
-                    <p className="font-medium text-rose-500">
+                  <div key={answer.questionId} className="border-b border-slate-100 pb-3">
+                    <p className="font-medium text-indigo-700">
                       {index + 1}. {question?.text}
                     </p>
-                    <p className="text-pink-700 mt-1">{answer.value.toString()}</p>
+                    <p className="text-slate-700 mt-1">{answer.value.toString()}</p>
                   </div>
                 )
               })}
             </div>
           </div>
-          <Button onClick={handleFinish} size="lg" className="mt-6 bg-black hover:bg-gray-800 text-white rounded-full px-8 py-6">
+          <Button onClick={handleFinish} size="lg" className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 py-6">
             Return Home
           </Button>
         </div>
@@ -172,39 +172,43 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
   }
 
   return (
-    <div className="flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl">
+    <div className="flex items-center justify-center p-6 bg-gradient-to-br from-sky-50 to-white min-h-screen">
+      {/* Background decoration */}
+      <div className="absolute top-40 right-10 w-64 h-64 rounded-full bg-sky-100 opacity-70"></div>
+      <div className="absolute bottom-20 left-10 w-96 h-96 rounded-full bg-indigo-50 opacity-70"></div>
+      
+      <div className="w-full max-w-2xl z-10">
         <div className="mb-8">
-          <div className="flex justify-between text-sm text-gray-500 mb-2">
+          <div className="flex justify-between text-sm text-slate-600 mb-2">
             <span className="font-medium">
               Question {currentQuestionIndex + 1} of {questions.length}
             </span>
             <span>{Math.round(progress)}% complete</span>
           </div>
-          <Progress value={progress} className="h-2 bg-pink-100" indicatorClassName="bg-rose-500" />
+          <Progress value={progress} className="h-2 bg-slate-100" indicatorClassName="bg-indigo-600" />
         </div>
 
-        <Card className="p-6 bg-white border-gray-100 rounded-xl shadow-lg">
+        <Card className="p-6 bg-white border-slate-200 rounded-xl shadow-sm">
           <div className="space-y-6">
             <div className="flex items-start gap-4">
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">{currentQuestion.text}</h2>
+                <h2 className="text-2xl font-semibold text-slate-900 mb-2">{currentQuestion.text}</h2>
                 {currentQuestion.type === "choice" && currentQuestion.options && (
-                  <div className="text-sm text-gray-600 mt-2 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="text-sm text-slate-600 mt-2 p-3 bg-slate-50 rounded-lg border border-slate-100">
                     <p className="font-medium mb-1">Options:</p>
                     <ul className="space-y-1">
                       {currentQuestion.options.map((option: any, idx: any) => (
                         <li key={idx} className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-rose-400 rounded-full"></span>
+                          <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
                           {option}
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
-                <Button variant="ghost" size="sm" className="mt-1 text-gray-500" onClick={speakQuestion}>
-                  <Volume2 className="h-4 w-4 mr-1 text-pink-500" />
-                  <span className="text-pink-500">Speak question</span>
+                <Button variant="ghost" size="sm" className="mt-1 text-slate-500" onClick={speakQuestion}>
+                  <Volume2 className="h-4 w-4 mr-1 text-sky-500" />
+                  <span className="text-sky-500">Speak question</span>
                 </Button>
               </div>
             </div>
@@ -212,25 +216,25 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
             <div
               className={`min-h-[100px] p-4 rounded-lg border ${
                 isListening 
-                  ? "border-rose-500 bg-rose-500/5 animate-pulse" 
-                  : "border-gray-200 bg-gray-50"
+                  ? "border-indigo-500 bg-indigo-500/5 animate-pulse" 
+                  : "border-slate-200 bg-slate-50"
               }`}
             >
               {transcript ? (
-                <p className="text-gray-800">{transcript}</p>
+                <p className="text-slate-800">{transcript}</p>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   {isListening ? (
                     <>
                       <div className="flex space-x-2 mb-3">
-                        <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse delay-0"></div>
-                        <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse delay-150"></div>
-                        <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse delay-300"></div>
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-0"></div>
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-150"></div>
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-300"></div>
                       </div>
-                      <p className="text-gray-600">Listening... Speak now</p>
+                      <p className="text-slate-600">Listening... Speak now</p>
                     </>
                   ) : (
-                    <p className="text-gray-500">
+                    <p className="text-slate-500">
                       Click the microphone button to start speaking
                     </p>
                   )}
@@ -241,10 +245,10 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
             <div className="flex items-center justify-between">
               <Button 
                 onClick={toggleListening} 
-                className={`gap-2 rounded-full px-5 py-2 ${
+                className={`gap-2 rounded-lg px-5 py-2 ${
                   isListening 
                     ? "bg-red-500 hover:bg-red-600 text-white" 
-                    : "bg-pink-100 text-pink-800 hover:bg-pink-200"
+                    : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
                 }`}
               >
                 {isListening ? (
@@ -263,7 +267,7 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
               <Button 
                 onClick={submitAnswer} 
                 disabled={!transcript.trim()} 
-                className="gap-2 bg-pink-100 text-pink-800 hover:bg-pink-200 rounded-full px-5 py-2"
+                className="gap-2 bg-sky-500 text-white hover:bg-sky-600 rounded-lg px-5 py-2 disabled:bg-slate-200 disabled:text-slate-500"
               >
                 Next Question
                 <ArrowRight className="h-4 w-4" />
@@ -275,10 +279,10 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
       
       {/* Custom fonts */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
         
         .font-display {
-          font-family: 'Outfit', sans-serif;
+          font-family: 'Inter', sans-serif;
         }
       `}</style>
     </div>

@@ -50,7 +50,7 @@ const FormUrlInput = () => {
   
   return (
     <div className="max-w-xl mx-auto">
-      <div className="bg-transparent dark:bg-slate-900 p-8 rounded-xl border-gray-100 dark:border-slate-800">
+      <div className="bg-transparent rounded-xl dark:border-slate-800">
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
@@ -64,7 +64,7 @@ const FormUrlInput = () => {
             <Button
               type="submit"
               size="icon"
-              className="absolute right-1.5 top-1.5 h-11 w-11 rounded-lg bg-amber-600 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all"
+              className="absolute right-1.5 top-1.5 h-11 w-11 rounded-lg bg-blue-600 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all"
               disabled={isLoading}
             >
               {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ArrowRight className="h-5 w-5" />}
