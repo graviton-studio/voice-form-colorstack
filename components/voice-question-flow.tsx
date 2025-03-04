@@ -84,10 +84,10 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
   // Update progress when answers change
   useEffect(() => {
     updateProgress();
-  }, [answers]);
+  }, [answers, currentQuestionIndex]);
 
   const updateProgress = () => {
-    const progressValue = (answers.length / questions.length) * 100;
+    const progressValue = (currentQuestionIndex / questions.length) * 100;
     setProgress(progressValue);
   };
 
