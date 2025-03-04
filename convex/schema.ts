@@ -1,6 +1,5 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import test from "node:test";
 
 export default defineSchema({
   questionForm: defineTable({

@@ -6,7 +6,14 @@ import type { Question } from "@/lib/form-extractor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Mic, MicOff, ArrowRight, CheckCircle2, Volume2 } from "lucide-react";
+import {
+  Mic,
+  MicOff,
+  ArrowRight,
+  CheckCircle2,
+  Volume2,
+  ArrowLeft,
+} from "lucide-react";
 
 type Answer = {
   questionId: string;
@@ -142,6 +149,50 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
     router.push("/");
   };
 
+  const goToPreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      // Stop listening if active
+      if (isListening && recognitionRef.current) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      }
+
+      // Remove the answer for the current question if it exists
+      const updatedAnswers = [...answers];
+      const currentQuestionId = questions[currentQuestionIndex].id;
+      const answerIndex = updatedAnswers.findIndex(
+        (a) => a.questionId === currentQuestionId,
+      );
+
+      if (answerIndex !== -1) {
+        updatedAnswers.splice(answerIndex, 1);
+        setAnswers(updatedAnswers);
+      }
+
+      // Go back to previous question
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+
+      // Set transcript to the previous answer if it exists
+      const previousQuestionId = questions[currentQuestionIndex - 1].id;
+      const previousAnswer = updatedAnswers.find(
+        (a) => a.questionId === previousQuestionId,
+      );
+
+      if (previousAnswer) {
+        setTranscript(previousAnswer.value.toString());
+      } else {
+        setTranscript("");
+      }
+    }
+  };
+
+  // Add a handler for manual transcript changes
+  const handleTranscriptChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setTranscript(e.target.value);
+  };
+
   if (completed) {
     return (
       <div className="flex items-center justify-center p-6 bg-gradient-to-br from-sky-50 to-white min-h-screen">
@@ -249,62 +300,72 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
             </div>
 
             <div
-              className={`min-h-[100px] p-4 rounded-lg border ${
-                isListening
-                  ? "border-indigo-500 bg-indigo-500/5 animate-pulse"
-                  : "border-slate-200 bg-slate-50"
+              className={`relative min-h-[100px] ${
+                isListening ? "animate-pulse" : ""
               }`}
             >
-              {transcript ? (
-                <p className="text-slate-800">{transcript}</p>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center">
-                  {isListening ? (
-                    <>
-                      <div className="flex space-x-2 mb-3">
-                        <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-0"></div>
-                        <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-150"></div>
-                        <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-300"></div>
-                      </div>
-                      <p className="text-slate-600">Listening... Speak now</p>
-                    </>
-                  ) : (
-                    <p className="text-slate-500">
-                      Click the microphone button to start speaking
-                    </p>
-                  )}
+              <textarea
+                value={transcript}
+                onChange={handleTranscriptChange}
+                placeholder={
+                  isListening
+                    ? "Listening... Speak now"
+                    : "Click the microphone button to start speaking or type your answer here"
+                }
+                className={`w-full min-h-[100px] p-4 rounded-lg border resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 ${
+                  isListening
+                    ? "border-indigo-500 bg-indigo-500/5"
+                    : "border-slate-200 bg-slate-50"
+                }`}
+              />
+
+              {isListening && !transcript && (
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-0"></div>
+                  <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-150"></div>
+                  <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse delay-300"></div>
                 </div>
               )}
             </div>
 
             <div className="flex items-center justify-between">
               <Button
-                onClick={toggleListening}
-                className={`gap-2 rounded-lg px-5 py-2 ${
-                  isListening
-                    ? "bg-red-500 hover:bg-red-600 text-white"
-                    : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
-                }`}
+                onClick={goToPreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+                className="gap-2 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg px-5 py-2 disabled:bg-slate-50 disabled:text-slate-400"
               >
-                {isListening ? (
-                  <>
-                    <MicOff className="h-4 w-4" />
-                    Stop Listening
-                  </>
-                ) : (
-                  <>
-                    <Mic className="h-4 w-4" />
-                    Start Speaking
-                  </>
-                )}
+                <ArrowLeft className="h-4 w-4" />
+                Back
               </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={toggleListening}
+                  className={`gap-2 rounded-lg px-5 py-2 ${
+                    isListening
+                      ? "bg-red-500 hover:bg-red-600 text-white"
+                      : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+                  }`}
+                >
+                  {isListening ? (
+                    <>
+                      <MicOff className="h-4 w-4" />
+                      Stop Listening
+                    </>
+                  ) : (
+                    <>
+                      <Mic className="h-4 w-4" />
+                      Start Speaking
+                    </>
+                  )}
+                </Button>
+              </div>
 
               <Button
                 onClick={submitAnswer}
                 disabled={!transcript.trim()}
                 className="gap-2 bg-sky-500 text-white hover:bg-sky-600 rounded-lg px-5 py-2 disabled:bg-slate-200 disabled:text-slate-500"
               >
-                Next Question
+                Next
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>

@@ -1,7 +1,6 @@
 "use client";
-import { LandingHero } from "@/components/landing-hero";
 import FormUrlInput from "@/components/form-url-input";
-import { Mic, ChevronRight, Check, ArrowRight } from "lucide-react";
+import { Mic, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
