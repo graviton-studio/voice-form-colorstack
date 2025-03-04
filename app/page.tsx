@@ -1,5 +1,7 @@
 "use client";
 import FormUrlInput from "@/components/form-url-input";
+import { PricingSection } from "@/components/pricing-section";
+import { Footer } from "@/components/footer";
 import { Mic, ArrowRight } from "lucide-react";
 
 export default function Home() {
@@ -234,6 +236,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Pricing Section */}
+      <PricingSection />
+
+      {/* Footer */}
+      <Footer />
 
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
