@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { VoiceQuestionFlow } from "@/components/voice-question-flow"
-import type { Question } from "@/lib/form-extractor"
-import { Loader2 } from "lucide-react"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { VoiceQuestionFlow } from "@/components/voice-question-flow";
+import type { Question } from "@/lib/form-extractor";
+import { Loader2 } from "lucide-react";
 
 export default function AnswerPage() {
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     // Retrieve questions from session storage
-    const storedQuestions = sessionStorage.getItem("formQuestions")
+    const storedQuestions = sessionStorage.getItem("formQuestions");
 
     if (!storedQuestions) {
       // If no questions found, redirect back to home
-      router.push("/")
-      return
+      router.push("/");
+      return;
     }
 
     try {
-      const parsedQuestions = JSON.parse(storedQuestions)
-      setQuestions(parsedQuestions)
+      const parsedQuestions = JSON.parse(storedQuestions);
+      setQuestions(parsedQuestions);
     } catch (error) {
-      console.error("Error parsing stored questions:", error)
-      router.push("/")
+      console.error("Error parsing stored questions:", error);
+      router.push("/");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [router])
+  }, [router]);
 
   if (loading) {
     return (
@@ -40,7 +40,7 @@ export default function AnswerPage() {
           <p className="text-xl">Loading questions...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -49,6 +49,5 @@ export default function AnswerPage() {
         <VoiceQuestionFlow questions={questions} />
       </div>
     </main>
-  )
+  );
 }
-

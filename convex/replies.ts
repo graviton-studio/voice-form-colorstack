@@ -1,7 +1,14 @@
-import { mutation, query, action, internalMutation, internalQuery, internalAction } from './_generated/server';
-import { v} from 'convex/values';
+import {
+  mutation,
+  query,
+  action,
+  internalMutation,
+  internalQuery,
+  internalAction,
+} from "./_generated/server";
+import { v } from "convex/values";
 //import { getAppIdea } from './openai/gpt';
-import { internal } from './_generated/api';
+import { internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 import { paginationOptsValidator } from "convex/server";
 import { api } from "@/convex/_generated/api";
@@ -42,7 +49,7 @@ export const addReply = mutation({
     if (!questionId) {
       throw new Error("Invalid questionId");
     }
-    const question = await ctx.db.get(questionId)
+    const question = await ctx.db.get(questionId);
     if (!question) {
       throw new Error("Form not found");
     }
