@@ -1,30 +1,26 @@
 "use client";
-import { LandingHero } from "@/components/landing-hero";
 import FormUrlInput from "@/components/form-url-input";
-import { Mic, ChevronRight, Check, ArrowRight } from "lucide-react";
+import { PricingSection } from "@/components/pricing-section";
+import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { Mic, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-sky-50 to-white text-slate-800 relative overflow-hidden">
       {/* Abstract shapes in background */}
       <div className="absolute top-40 right-10 w-64 h-64 rounded-full bg-sky-100 opacity-70"></div>
-      <div className="absolute bottom-20 left-10 w-96 h-96 rounded-full bg-indigo-50 opacity-70"></div>
+      <div className="absolute bottom-10 left-10 w-16 h-16 rounded-full bg-indigo-50 opacity-70"></div>
+      <div className="absolute bottom-40 right-10 w-16 h-16 rounded-full bg-indigo-200 opacity-70"></div>
       <div className="absolute top-80 left-1/4 w-24 h-24 rounded-full bg-purple-100 opacity-60"></div>
 
-      {/* Header */}
+      {/* Header with Navbar */}
       <header className="relative z-10 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-sky-500 to-indigo-500 p-1.5 rounded-lg">
-              <Mic className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-xl text-slate-900">VoiceForm</span>
-          </div>
-        </div>
+        <Navbar />
       </header>
 
       {/* Hero Section - Completely Redesigned */}
-      <section className="relative z-10">
+      <section id="home" className="relative z-10">
         <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1">
@@ -147,7 +143,7 @@ export default function Home() {
       </section>
 
       {/* Feature highlights */}
-      <section className="relative z-10 py-16 md:py-24">
+      <section id="features" className="relative z-10 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
@@ -235,6 +231,129 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Pricing Section */}
+      <section id="pricing">
+        <PricingSection />
+      </section>
+
+      {/* About Section - Optional */}
+      <section id="about" className="relative z-10 py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              About VoiceForm
+            </h2>
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+              We're on a mission to make form-filling accessible, efficient, and
+              enjoyable for everyone.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-semibold text-slate-900 mb-4">
+                Our Story
+              </h3>
+              <p className="text-slate-600 mb-4">
+                VoiceForm was born from a simple observation: filling out forms
+                is tedious and time-consuming. We wanted to create a solution
+                that leverages the power of voice technology to make this
+                everyday task easier.
+              </p>
+              <p className="text-slate-600">
+                Today, we're proud to help thousands of users save time and
+                reduce the friction of form completion, making digital
+                experiences more accessible to everyone.
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-indigo-50 to-sky-50 p-8 rounded-xl border border-indigo-100">
+              <h3 className="text-2xl font-semibold text-slate-900 mb-4">
+                Our Values
+              </h3>
+              <ul className="space-y-4">
+                <li className="flex items-start">
+                  <div className="bg-indigo-100 p-2 rounded-lg mr-3 mt-1">
+                    <svg
+                      className="w-4 h-4 text-indigo-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-slate-900">
+                      Accessibility First
+                    </h4>
+                    <p className="text-sm text-slate-600">
+                      Making technology work for everyone, regardless of
+                      ability.
+                    </p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="bg-sky-100 p-2 rounded-lg mr-3 mt-1">
+                    <svg
+                      className="w-4 h-4 text-sky-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-slate-900">Innovation</h4>
+                    <p className="text-sm text-slate-600">
+                      Constantly pushing the boundaries of what's possible.
+                    </p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="bg-purple-100 p-2 rounded-lg mr-3 mt-1">
+                    <svg
+                      className="w-4 h-4 text-purple-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-slate-900">
+                      Privacy & Security
+                    </h4>
+                    <p className="text-sm text-slate-600">
+                      Your data is yours. We keep it safe and secure.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
 
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
