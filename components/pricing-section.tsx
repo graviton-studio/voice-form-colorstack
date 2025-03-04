@@ -17,7 +17,7 @@ const pricingTiers: PricingTier[] = [
     price: "$0",
     description: "Perfect for trying out VoiceForm",
     features: [
-      "5 forms per month",
+      "50 responses per month",
       "Basic voice recognition",
       "Standard support",
       "1 language (English)",
@@ -29,7 +29,7 @@ const pricingTiers: PricingTier[] = [
     price: "$12",
     description: "For professionals and small teams",
     features: [
-      "Unlimited forms",
+      "1000 responses per month",
       "Advanced voice recognition",
       "Priority support",
       "5 languages",
@@ -44,7 +44,7 @@ const pricingTiers: PricingTier[] = [
     price: "$49",
     description: "For organizations with advanced needs",
     features: [
-      "Unlimited forms",
+      "Unlimited responses",
       "Premium voice recognition",
       "Dedicated support",
       "All languages",
