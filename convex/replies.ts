@@ -59,3 +59,61 @@ export const addReply = mutation({
     });
   },
 });
+
+// Mutation to save multiple answers at once
+export const saveAnswers = mutation({
+  args: {
+    formId: v.string(),
+    answers: v.array(
+      v.object({
+        questionId: v.string(),
+        value: v.union(v.string(), v.array(v.string())),
+      }),
+    ),
+  },
+  handler: async (ctx, args) => {
+    const formId = ctx.db.normalizeId("questionForm", args.formId);
+    if (!formId) {
+      throw new Error("Invalid formId");
+    }
+
+    const form = await ctx.db.get(formId);
+    if (!form) {
+      throw new Error("Form not found");
+    }
+
+    // Save each answer
+    const savedAnswerIds = [];
+    for (const answer of args.answers) {
+      const questionId = ctx.db.normalizeId("questions", answer.questionId);
+      if (!questionId) {
+        console.warn(`Invalid questionId: ${answer.questionId}`);
+        continue;
+      }
+
+      const question = await ctx.db.get(questionId);
+      if (!question) {
+        console.warn(`Question not found: ${answer.questionId}`);
+        continue;
+      }
+
+      // Convert array values to string if needed
+      const userReply = Array.isArray(answer.value)
+        ? answer.value.join(", ")
+        : answer.value.toString();
+
+      const replyId = await ctx.db.insert("replies", {
+        questionId: question._id,
+        userReply: userReply,
+      });
+
+      savedAnswerIds.push(replyId);
+    }
+
+    return {
+      success: true,
+      count: savedAnswerIds.length,
+      savedAnswerIds,
+    };
+  },
+});

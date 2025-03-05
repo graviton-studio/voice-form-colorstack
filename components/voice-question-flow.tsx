@@ -13,8 +13,12 @@ import {
   CheckCircle2,
   Volume2,
   ArrowLeft,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { toast } from "sonner";
 
 type Answer = {
   questionId: string;
@@ -31,15 +35,28 @@ declare global {
   }
 }
 
-export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
+export function VoiceQuestionFlow({
+  questions,
+  formId,
+}: {
+  questions: Question[];
+  formId: string;
+}) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [draftTranscripts, setDraftTranscripts] = useState<
+    Record<string, string>
+  >({});
   const [completed, setCompleted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const recognitionRef = useRef<any>(null);
   const router = useRouter();
+
+  // Get the Convex mutation
+  const saveAnswersMutation = useMutation(api.replies.saveAnswers);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -141,13 +158,58 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
     }
   };
 
-  const handleFinish = () => {
-    submitAnswer();
-    // In a real app, you would submit the answers to your backend
-    console.log("Answers:", answers);
+  /**
+   * Save all answers to the database using Convex mutation
+   */
+  const saveAnswersToDatabase = async () => {
+    try {
+      setIsSaving(true);
 
-    // Clear session storage and redirect to home
-    sessionStorage.removeItem("formQuestions");
+      // Make sure we have the formId
+      if (!formId) {
+        console.error("Missing formId, cannot save answers");
+        toast.error("Missing form ID. Please try again.");
+        return false;
+      }
+
+      // Make sure we have answers to save
+      if (answers.length === 0) {
+        console.warn("No answers to save");
+        return false;
+      }
+
+      // Call the Convex mutation to save all answers
+      const result = await saveAnswersMutation({
+        formId,
+        answers,
+      });
+
+      console.log("Saved answers to database:", result);
+
+      if (result.success) {
+        toast.success(`Successfully saved ${result.count} answers!`);
+        return true;
+      } else {
+        toast.error("Failed to save some answers");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error saving answers:", error);
+      toast.error("Failed to save answers. Please try again.");
+      return false;
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleFinish = async () => {
+    // If we're on the last question, submit the answer first
+    if (currentQuestionIndex === questions.length - 1 && transcript.trim()) {
+      submitAnswer();
+    }
+
+    // Save all answers to the database
+    await saveAnswersToDatabase();
   };
 
   const goToPreviousQuestion = () => {
@@ -235,11 +297,18 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
           </div>
           <Link href="/">
             <Button
-              onClick={handleFinish}
               size="lg"
               className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 py-6"
+              disabled={isSaving}
             >
-              Return Home
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving Responses...
+                </>
+              ) : (
+                "Return Home"
+              )}
             </Button>
           </Link>
         </div>
@@ -264,7 +333,11 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
           <Progress
             value={progress}
             className="h-2 bg-slate-100"
-            indicatorClassName="bg-indigo-600"
+            style={
+              {
+                "--progress-foreground": "rgb(79, 70, 229)",
+              } as React.CSSProperties
+            }
           />
         </div>
 
