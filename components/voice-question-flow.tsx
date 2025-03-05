@@ -14,6 +14,7 @@ import {
   Volume2,
   ArrowLeft,
 } from "lucide-react";
+import Link from "next/link";
 
 type Answer = {
   questionId: string;
@@ -141,12 +142,12 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
   };
 
   const handleFinish = () => {
+    submitAnswer();
     // In a real app, you would submit the answers to your backend
     console.log("Answers:", answers);
 
     // Clear session storage and redirect to home
     sessionStorage.removeItem("formQuestions");
-    router.push("/");
   };
 
   const goToPreviousQuestion = () => {
@@ -191,6 +192,7 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setTranscript(e.target.value);
+    console.log(answers);
   };
 
   if (completed) {
@@ -231,13 +233,15 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
               })}
             </div>
           </div>
-          <Button
-            onClick={handleFinish}
-            size="lg"
-            className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 py-6"
-          >
-            Return Home
-          </Button>
+          <Link href="/">
+            <Button
+              onClick={handleFinish}
+              size="lg"
+              className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 py-6"
+            >
+              Return Home
+            </Button>
+          </Link>
         </div>
       </div>
     );
@@ -361,11 +365,17 @@ export function VoiceQuestionFlow({ questions }: { questions: Question[] }) {
               </div>
 
               <Button
-                onClick={submitAnswer}
+                onClick={
+                  currentQuestionIndex < questions.length - 1
+                    ? submitAnswer
+                    : handleFinish
+                }
                 disabled={!transcript.trim()}
                 className="gap-2 bg-sky-500 text-white hover:bg-sky-600 rounded-lg px-5 py-2 disabled:bg-slate-200 disabled:text-slate-500"
               >
-                Next
+                {currentQuestionIndex < questions.length - 1
+                  ? "Next"
+                  : "Submit"}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>

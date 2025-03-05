@@ -17,6 +17,7 @@ const FormUrlInput = () => {
   const [idToPushTo, setIdToPushTo] = useState<string>("");
   const router = useRouter();
   const addQuestionForm = useMutation(api.replies.addQuestionForm);
+  const addQuestion = useMutation(api.replies.addQuestion);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +33,13 @@ const FormUrlInput = () => {
       // Extract form questions from the URL
       const idVal = await addQuestionForm({ url });
       setIdToPushTo(idVal);
-      const result = await extractFormQuestions(url, idVal);
+      const result = await extractFormQuestions(
+        url,
+        idVal,
+        async ({ formId, question }) => {
+          return await addQuestion({ formId, question });
+        },
+      );
 
       if (result.success) {
         sessionStorage.setItem(
